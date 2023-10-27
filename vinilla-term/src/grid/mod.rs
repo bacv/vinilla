@@ -78,7 +78,6 @@ impl<T: Default + Clone> Grid<T> {
     }
 
     pub fn display_iter(&self) -> GridIterator<'_, T> {
-        let last_column = self.last_column();
         let start = Point {
             line: Line(-1),
             column: self.last_column(),

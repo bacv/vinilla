@@ -4,16 +4,14 @@ mod grid;
 pub use cell::Cell;
 pub use grid::{Column, Grid, GridIterator, Line};
 
-pub struct Term<T> {
+pub struct Term {
     grid: Grid<Cell>,
-    event_proxy: T,
 }
 
-impl<T> Term<T> {
-    pub fn new(lines: usize, columns: usize, event_proxy: T) -> Self {
+impl Term {
+    pub fn new(lines: usize, columns: usize) -> Self {
         Self {
             grid: Grid::new(columns, lines),
-            event_proxy,
         }
     }
 
@@ -43,7 +41,7 @@ mod tests {
 
     #[test]
     fn display_line() {
-        let mut term = Term::new(2, 2, ());
+        let mut term = Term::new(2, 2);
         term.goto(0, 0);
         term.input('h');
         term.goto(0, 1);
