@@ -2,7 +2,7 @@ mod cell;
 mod grid;
 
 pub use cell::Cell;
-pub use grid::{Column, Grid, GridIterator, Line};
+pub use grid::{Column, Grid, GridIterator, Indexed, Line};
 
 pub struct Term {
     grid: Grid<Cell>,

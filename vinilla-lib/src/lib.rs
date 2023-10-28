@@ -1,4 +1,24 @@
-use vinilla_term::{Cell, Term};
+mod color;
+
+use color::ColorExt;
+use vinilla_term::{Cell as TermCell, Indexed, Term};
+
+#[repr(C)]
+pub struct Cell {
+    pub c: char,
+    pub bg: u16,
+    pub fg: u16,
+}
+
+impl From<Indexed<&TermCell>> for Cell {
+    fn from(i: Indexed<&TermCell>) -> Self {
+        Self {
+            c: i.cell.c,
+            bg: i.cell.bg.to_u16(),
+            fg: i.cell.fg.to_u16(),
+        }
+    }
+}
 
 /// CellsResult contains the pointer to an array of cells and it's length.
 #[repr(C)]
@@ -39,7 +59,7 @@ pub extern "C" fn new_term(lines: usize, columns: usize) -> *mut Term {
 #[no_mangle]
 pub unsafe extern "C" fn update_term(ptr: *mut Term) -> CellsResult {
     let term = unsafe { &mut *ptr };
-    let mut cells: Vec<Cell> = term.renderable_content().map(|i| i.cell.clone()).collect();
+    let mut cells: Vec<Cell> = term.renderable_content().map(Into::into).collect();
 
     let cell_ptr = cells.as_mut_ptr();
     let length = cells.len();
