@@ -1,5 +1,6 @@
 use vte::ansi::{Color, NamedColor};
 
+#[repr(C)]
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Cell {
     pub c: char,
