@@ -1,5 +1,7 @@
 use core::ops::{Index, IndexMut};
 
+use alloc::vec::Vec;
+
 use super::{row::Row, Line};
 
 #[derive(Clone, Debug)]

@@ -1,7 +1,10 @@
+extern crate alloc;
+
 mod color;
 mod processor;
 
-use std::{cell::RefCell, rc::Rc};
+use alloc::{boxed::Box, rc::Rc, vec::Vec};
+use core::cell::RefCell;
 
 use color::ColorExt;
 use processor::Processor;
@@ -82,7 +85,7 @@ pub unsafe extern "C" fn update_term(
     length: usize,
 ) -> CellsResult {
     let term_state = unsafe { &mut *ptr };
-    let byte_slice = std::slice::from_raw_parts(bytes, length);
+    let byte_slice = alloc::slice::from_raw_parts(bytes, length);
 
     for &byte in byte_slice {
         term_state.state.advance(&mut term_state.processor, byte);
@@ -93,7 +96,7 @@ pub unsafe extern "C" fn update_term(
 
     let cell_ptr = cells.as_mut_ptr();
     let length = cells.len();
-    std::mem::forget(cells);
+    core::mem::forget(cells);
 
     CellsResult {
         cells: cell_ptr,

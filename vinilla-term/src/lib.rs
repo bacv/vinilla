@@ -1,3 +1,5 @@
+extern crate alloc;
+
 mod cell;
 mod grid;
 mod term;

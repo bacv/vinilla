@@ -55,10 +55,10 @@ pub struct Grid<T> {
     raw: Storage<T>,
 
     /// Number of columns.
-    columns: usize,
+    pub columns: usize,
 
     /// Number of visible lines.
-    lines: usize,
+    pub lines: usize,
 }
 
 impl<T: Default + Clone> Grid<T> {

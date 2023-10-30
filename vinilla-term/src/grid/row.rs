@@ -3,6 +3,8 @@ use core::{
     ptr, slice,
 };
 
+use alloc::vec::Vec;
+
 use super::Column;
 
 /// A row in the grid.
