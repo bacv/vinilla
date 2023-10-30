@@ -4,4 +4,4 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-vte = { version = "0.11.1", features = ["ansi"] }
+vte = { version = "0.12.0", features = ["ansi"] }
