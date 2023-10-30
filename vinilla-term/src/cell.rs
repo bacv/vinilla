@@ -7,6 +7,12 @@ pub struct Cell {
     pub bg: Color,
 }
 
+impl Cell {
+    pub fn reset(&mut self) {
+        *self = Cell::default();
+    }
+}
+
 impl Default for Cell {
     #[inline]
     fn default() -> Cell {

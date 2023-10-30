@@ -31,6 +31,33 @@ impl Term {
     pub fn renderable_content(&self) -> GridIterator<Cell> {
         self.grid.display_iter()
     }
+
+    pub fn new_line(&mut self) {
+        if self.grid.cursor.point.line.0 < self.grid.lines as i32 - 1 {
+            self.grid.cursor.point.line.0 += 1;
+        }
+        self.grid.cursor.point.column = Column(0);
+    }
+
+    pub fn carriage_return(&mut self) {
+        self.grid.cursor.point.column = Column(0);
+    }
+
+    pub fn backspace(&mut self) {
+        if self.grid.cursor.point.column.0 > 0 {
+            self.grid.cursor.point.column.0 -= 1;
+            self.grid.cursor_cell().reset();
+        }
+    }
+
+    pub fn move_cursor_right(&mut self, n: usize) {
+        self.grid.cursor.point.column.0 =
+            (self.grid.cursor.point.column.0 + n).min(self.grid.columns - 1);
+    }
+
+    pub fn move_cursor_up(&mut self, n: usize) {
+        self.grid.cursor.point.line.0 = self.grid.cursor.point.line.0.saturating_sub(n as i32);
+    }
 }
 
 #[cfg(test)]
