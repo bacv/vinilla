@@ -4,6 +4,8 @@
 #include <ostream>
 #include <new>
 
+struct TermState;
+
 struct Cell {
   uint32_t c;
   uint16_t bg;
@@ -27,7 +29,7 @@ extern "C" {
 /// The caller must ensure to deallocate the memory for the `Term` instance
 /// when it is no longer needed by converting the raw pointer back into a `Box`
 /// and dropping it.
-Term *new_term(uintptr_t lines, uintptr_t columns);
+TermState *new_term(uintptr_t lines, uintptr_t columns);
 
 /// Updates the provided `Term` instance and returns the cells that need rendering.
 ///
@@ -44,7 +46,7 @@ Term *new_term(uintptr_t lines, uintptr_t columns);
 ///   instance previously created with `new_term`.
 /// - The caller is also responsible for deallocating the memory of the returned cell list
 ///   using an appropriate function, like `free_cells`.
-CellsResult update_term(Term *ptr);
+CellsResult update_term(TermState *ptr, const uint8_t *bytes, uintptr_t length);
 
 /// Transforms pointer to Term and drops it.
 ///
@@ -52,7 +54,7 @@ CellsResult update_term(Term *ptr);
 ///
 /// Raw pointers can be null, misaligned, or dangling, so dereferencing
 /// them can cause undefined behavior.
-void free_term(Term *ptr);
+void free_term(TermState *ptr);
 
 /// Free cells returned by the update function.
 ///

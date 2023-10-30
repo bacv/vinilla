@@ -1,7 +1,12 @@
 mod color;
+mod processor;
+
+use std::{cell::RefCell, rc::Rc};
 
 use color::ColorExt;
+use processor::Processor;
 use vinilla_term::{Cell as TermCell, Indexed, Term};
+use vte::Parser;
 
 #[repr(C)]
 pub struct Cell {
@@ -27,6 +32,12 @@ pub struct CellsResult {
     length: usize,
 }
 
+pub struct TermState {
+    pub term: Rc<RefCell<Term>>,
+    pub state: Parser,
+    pub processor: Processor,
+}
+
 /// Creates a new `Term` instance with the specified dimensions.
 ///
 /// This function will allocate memory for a new `Term` instance with the provided
@@ -37,8 +48,16 @@ pub struct CellsResult {
 /// when it is no longer needed by converting the raw pointer back into a `Box`
 /// and dropping it.
 #[no_mangle]
-pub extern "C" fn new_term(lines: usize, columns: usize) -> *mut Term {
-    Box::into_raw(Box::new(Term::new(lines, columns)))
+pub extern "C" fn new_term(lines: usize, columns: usize) -> *mut TermState {
+    let term = Rc::new(RefCell::new(Term::new(lines, columns)));
+    let state = Parser::new();
+    let processor = Processor::new(term.clone());
+
+    Box::into_raw(Box::new(TermState {
+        term,
+        state,
+        processor,
+    }))
 }
 
 /// Updates the provided `Term` instance and returns the cells that need rendering.
@@ -57,8 +76,19 @@ pub extern "C" fn new_term(lines: usize, columns: usize) -> *mut Term {
 /// - The caller is also responsible for deallocating the memory of the returned cell list
 ///   using an appropriate function, like `free_cells`.
 #[no_mangle]
-pub unsafe extern "C" fn update_term(ptr: *mut Term) -> CellsResult {
-    let term = unsafe { &mut *ptr };
+pub unsafe extern "C" fn update_term(
+    ptr: *mut TermState,
+    bytes: *const u8,
+    length: usize,
+) -> CellsResult {
+    let term_state = unsafe { &mut *ptr };
+    let byte_slice = std::slice::from_raw_parts(bytes, length);
+
+    for &byte in byte_slice {
+        term_state.state.advance(&mut term_state.processor, byte);
+    }
+
+    let term = term_state.term.borrow();
     let mut cells: Vec<Cell> = term.renderable_content().map(Into::into).collect();
 
     let cell_ptr = cells.as_mut_ptr();
@@ -78,7 +108,7 @@ pub unsafe extern "C" fn update_term(ptr: *mut Term) -> CellsResult {
 /// Raw pointers can be null, misaligned, or dangling, so dereferencing
 /// them can cause undefined behavior.
 #[no_mangle]
-pub unsafe extern "C" fn free_term(ptr: *mut Term) {
+pub unsafe extern "C" fn free_term(ptr: *mut TermState) {
     if ptr.is_null() {
         return;
     }
