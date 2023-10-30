@@ -3,11 +3,15 @@ name = "vinilla-lib"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+crate-type = ["cdylib", "rlib", "staticlib"]
 
 [dependencies]
 vinilla-term = { path = "../vinilla-term" }
 vte = { version = "0.11.1", features = ["ansi"] }
+
+[build-dependencies]
+cbindgen = "0.26.0"
 
 [profile.release]
 lto = "thin"
