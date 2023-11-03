@@ -1,3 +1,7 @@
+/// Definitions in this file are supposed to be use together with libvinilla.h.
+///
+/// To use vinilla-lib as crate in rust projects, please use vinilla-lib::Processor,
+/// vinilla-lib::Term and others directly.
 extern crate alloc;
 
 use crate::color::ColorExt;
@@ -8,11 +12,6 @@ use core::cell::RefCell;
 
 use vinilla_term::{Cell as TermCell, Indexed, Term};
 use vte::Parser;
-
-/// Definitions in this file are supposed to be use together with libvinilla.h.
-///
-/// To use vinilla-lib as crate in rust projects, please use vinilla-lib::Processor
-/// and vinilla-lib::Term and others directly.
 
 #[repr(C)]
 pub struct Cell {

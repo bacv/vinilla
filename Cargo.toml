@@ -3,6 +3,7 @@ members = [
 	"vinilla-lib",
 	"vinilla-term"
 ]
+exclude = [ "examples/vinilla-rs" ]
 
 resolver = "2"
 

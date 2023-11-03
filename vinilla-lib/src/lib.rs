@@ -6,3 +6,4 @@ mod processor;
 
 pub use processor::Processor;
 pub use vinilla_term::*;
+pub use vte::Parser;
