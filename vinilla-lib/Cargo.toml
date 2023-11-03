@@ -5,7 +5,7 @@ edition = "2021"
 
 [lib]
 name = "vinilla"
-crate-type = ["staticlib"]
+crate-type = ["rlib", "staticlib"]
 
 [dependencies]
 vinilla-term = { path = "../vinilla-term" }
