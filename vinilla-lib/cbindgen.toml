@@ -1,1 +1,4 @@
 language = "C"
+
+sys_includes = ["stddef.h", "stdint.h"]
+no_includes = true
