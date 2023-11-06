@@ -2,8 +2,6 @@
 ///
 /// To use vinilla-lib as crate in rust projects, please use vinilla-lib::Processor,
 /// vinilla-lib::Term and others directly.
-extern crate alloc;
-
 use crate::color::ColorExt;
 use crate::processor::Processor;
 
