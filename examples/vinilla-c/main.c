@@ -1,4 +1,4 @@
-#include "../../target/libvinilla.h"
+#include "libvinilla.h"
 #include <stdio.h>
 
 int main() {
