@@ -13,7 +13,7 @@ use vte::Parser;
 
 #[repr(C)]
 pub struct Cell {
-    pub c: char,
+    pub c: u8,
     pub bg: u16,
     pub fg: u16,
 }
@@ -21,7 +21,7 @@ pub struct Cell {
 impl From<Indexed<&TermCell>> for Cell {
     fn from(i: Indexed<&TermCell>) -> Self {
         Self {
-            c: i.cell.c,
+            c: i.cell.c as u8,
             bg: i.cell.bg.to_u16(),
             fg: i.cell.fg.to_u16(),
         }
